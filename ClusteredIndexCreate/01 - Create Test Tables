@@ -1,0 +1,25 @@
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[RichPKTest_FK1]')) DROP TABLE PKTest_FK1;
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[RichPKTest_FK2]')) DROP TABLE PKTest_FK2;
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[RichPKTest_Main]')) DROP TABLE PKTest_Main;
+
+CREATE TABLE PKTest_Main
+(
+Primary_Key int CONSTRAINT [PK_PKTest_Main] PRIMARY KEY NONCLUSTERED
+,Field1 int INDEX [IX_PKTest_Main_Clustered] CLUSTERED
+,Field2 int
+,Field3 int
+)
+
+CREATE TABLE PKTest_FK1
+(
+Field1 int CONSTRAINT [Foreign_Key_1] FOREIGN KEY REFERENCES PKTest_Main(Primary_Key)
+,Field2 int
+,Field3 int
+)
+
+CREATE TABLE PKTest_FK2
+(
+Field1 int CONSTRAINT [Foreign_Key_2] FOREIGN KEY REFERENCES PKTest_Main(Primary_Key)
+,Field2 int
+,Field3 int
+)
