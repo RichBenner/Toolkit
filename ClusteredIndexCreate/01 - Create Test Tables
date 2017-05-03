@@ -1,6 +1,6 @@
-IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[RichPKTest_FK1]')) DROP TABLE PKTest_FK1;
-IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[RichPKTest_FK2]')) DROP TABLE PKTest_FK2;
-IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[RichPKTest_Main]')) DROP TABLE PKTest_Main;
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[PKTest_FK1]')) DROP TABLE PKTest_FK1;
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[PKTest_FK2]')) DROP TABLE PKTest_FK2;
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[PKTest_Main]')) DROP TABLE PKTest_Main;
 
 CREATE TABLE PKTest_Main
 (
