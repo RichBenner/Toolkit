@@ -4,31 +4,31 @@ IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[PKTest_
 
 CREATE TABLE PKTest_Main
 (
-Primary_Key int 
-,Field1 int 
-,Field2 int
-,Field3 int 
-,CONSTRAINT [PK_Name_Goes_Here] PRIMARY KEY NONCLUSTERED (Primary_Key asc, Field2 asc)
+     Field1 int 
+    ,Field2 int
+    ,Field3 int
+    ,Field4 int
+    ,CONSTRAINT [PK_Name_Goes_Here] PRIMARY KEY NONCLUSTERED (Field1 asc, Field2 asc)
 )
 
 CREATE CLUSTERED INDEX [IX_Clustered_Composite] ON [PKTest_Main] (Field2 asc, Field3 asc) 
 
-CREATE NONCLUSTERED INDEX [IX_PKTest_Main_Field2_Field3] ON [PKTest_Main] (Field2 asc, Field3 asc) 
+CREATE NONCLUSTERED INDEX [IX_PKTest_Main_Field2_Field3] ON [PKTest_Main] (Field3 asc, Field4 asc) 
 
 CREATE TABLE PKTest_FK1
 (
-Field1 int 
-,Field2 int
-,Field3 int
-,CONSTRAINT [PKTest_FK1_FK] FOREIGN KEY (Field2, Field3) REFERENCES PKTest_Main(Primary_Key,Field2)
+     Field1 int 
+    ,Field2 int
+    ,Field3 int
+    ,CONSTRAINT [PKTest_FK1_FK] FOREIGN KEY (Field2, Field3) REFERENCES PKTest_Main(Field1,Field2)
 )
 
 CREATE TABLE PKTest_FK2
 (
-Field1 int 
-,Field2 int
-,Field3 int
-,CONSTRAINT [PKTest_FK2_FK] FOREIGN KEY (Field1, Field2) REFERENCES PKTest_Main(Primary_Key,Field2)
+     Field1 int 
+    ,Field2 int
+    ,Field3 int
+,CONSTRAINT [PKTest_FK2_FK] FOREIGN KEY (Field1, Field2) REFERENCES PKTest_Main(Field1,Field2)
 )
 
 
