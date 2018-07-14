@@ -30,19 +30,21 @@ IF EXISTS (SELECT * FROM sys.dm_os_performance_counters)
 INSERT INTO #Environment (ID, Setting, Result)
 SELECT 2, 'Instance Name', COALESCE(CAST(SERVERPROPERTY('InstanceName') AS NVARCHAR(50)),'Unnamed Instance')
 UNION ALL
-SELECT 3, 'Product Version', CAST(SERVERPROPERTY('ProductVersion') AS NVARCHAR(50))
+SELECT 3, 'Version Name', SUBSTRING(@@VERSION,11, CHARINDEX('(',@@VERSION,1)-12)
+UNION ALL
+SELECT 4, 'Product Version', CAST(SERVERPROPERTY('ProductVersion') AS NVARCHAR(50))
 UNION ALL 
-SELECT 4, 'Product Level', CAST(SERVERPROPERTY('ProductLevel') AS NVARCHAR(50))
+SELECT 5, 'Product Level', CAST(SERVERPROPERTY('ProductLevel') AS NVARCHAR(50))
 UNION ALL 
-SELECT 5, 'Edition', CAST(SERVERPROPERTY('Edition') AS NVARCHAR(50))
+SELECT 6, 'Edition', CAST(SERVERPROPERTY('Edition') AS NVARCHAR(50))
 UNION ALL
-SELECT 6, 'IsClustered', CAST(SERVERPROPERTY('IsClustered') AS VARCHAR(100))
+SELECT 7, 'IsClustered', CAST(SERVERPROPERTY('IsClustered') AS VARCHAR(100))
 UNION ALL
-SELECT 7, 'IsHadrEnabled', CAST(COALESCE(SERVERPROPERTY('IsHadrEnabled'),0) AS VARCHAR(100))
+SELECT 8, 'IsHadrEnabled', CAST(COALESCE(SERVERPROPERTY('IsHadrEnabled'),0) AS VARCHAR(100))
 UNION ALL
-SELECT 8, 'Last Server Start', CONVERT(NVARCHAR(50),create_date) FROM sys.databases WHERE database_id = 2
+SELECT 9, 'Last Server Start', CONVERT(NVARCHAR(50),create_date) FROM sys.databases WHERE database_id = 2
 UNION ALL
-SELECT 9, 'Days Uptime', CONVERT(NVARCHAR(50),CONVERT(DECIMAL(4,2),DATEDIFF(SS, create_date, GETDATE())/86400.0)) FROM sys.databases WHERE database_id = 2
+SELECT 10, 'Days Uptime', CONVERT(NVARCHAR(50),CONVERT(DECIMAL(4,2),DATEDIFF(SS, create_date, GETDATE())/86400.0)) FROM sys.databases WHERE database_id = 2
 
 
 DECLARE @sql NVARCHAR(MAX)
@@ -51,15 +53,15 @@ IF EXISTS (SELECT * FROM sys.all_objects o INNER JOIN sys.all_columns c ON o.obj
 			WHERE o.name = 'dm_os_sys_info' AND c.name = 'physical_memory_kb' )
 BEGIN
     SET @sql = 
-    N'INSERT INTO #Environment (ID, Setting, Result)  SELECT 10, ''CPU Count'', cpu_count FROM sys.dm_os_sys_info;
-    INSERT INTO #Environment (ID, Setting, Result)  SELECT 11, ''Memory (GB)'', CAST(ROUND((physical_memory_kb / 1024.0 / 1024), 1) AS INT) FROM sys.dm_os_sys_info'
+    N'INSERT INTO #Environment (ID, Setting, Result)  SELECT 11, ''CPU Count'', cpu_count FROM sys.dm_os_sys_info;
+    INSERT INTO #Environment (ID, Setting, Result)  SELECT 12, ''Memory (GB)'', CAST(ROUND((physical_memory_kb / 1024.0 / 1024), 1) AS INT) FROM sys.dm_os_sys_info'
     EXEC (@sql)
 END
 ELSE
 BEGIN
     SET @sql = 
-    N'INSERT INTO #Environment (ID, Setting, Result)  SELECT 10, ''CPU Count'', cpu_count FROM sys.dm_os_sys_info;
-    INSERT INTO #Environment (ID, Setting, Result)  SELECT 11, ''Memory (GB)'', CAST(ROUND((physical_memory_in_bytes/1024.0/1024.0/1024.0), 1) AS INT) FROM sys.dm_os_sys_info'
+    N'INSERT INTO #Environment (ID, Setting, Result)  SELECT 11, ''CPU Count'', cpu_count FROM sys.dm_os_sys_info;
+    INSERT INTO #Environment (ID, Setting, Result)  SELECT 12, ''Memory (GB)'', CAST(ROUND((physical_memory_in_bytes/1024.0/1024.0/1024.0), 1) AS INT) FROM sys.dm_os_sys_info'
     EXEC (@sql)
 END
 
