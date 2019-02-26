@@ -25,7 +25,7 @@ SELECT
       db_name(a.database_id) AS [DB Name]
     , b.name AS [DB File Name]
     , a.file_id AS [File ID]
-    , CASE WHEN a.file_id = 2 THEN 'Log' ELSE 'Data' END AS [DB File Type]
+    , CASE WHEN b.type = 1 THEN 'Log' ELSE 'Data' END AS [DB File Type]
     , UPPER(SUBSTRING(b.physical_name, 1, 2)) AS [Disk Location] 
     , CASE WHEN a.num_of_reads < 1 THEN NULL ELSE CAST(a.io_stall_read_ms/(a.num_of_reads) AS INT) END AS [Avg Read Stall]
     , CASE 
